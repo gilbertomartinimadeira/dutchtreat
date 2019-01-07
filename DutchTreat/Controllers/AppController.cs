@@ -1,10 +1,17 @@
 using System;
+using DutchTreat.Services;
 using DutchTreat.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DutchTreat.Controllers {
 
     public class AppController : Controller {
+        private IMailService _mailService;
+
+        public AppController(IMailService mailService)
+        {
+            _mailService = mailService;
+        }
 
         public IActionResult Index()
         {          
@@ -20,23 +27,17 @@ namespace DutchTreat.Controllers {
         }
 
         [HttpPost("contact")]
-        public IActionResult Contact(ContactViewModel contact)
+        public IActionResult Contact(ContactViewModel contactVM)
         {
             ViewBag.Title = "Contact Us";
 
             if (ModelState.IsValid)
-            {
-
+            {            
                 //Send the email
-
-                return RedirectToAction();
-            }
-            else
-            {
-                //Show the errors
-            }
-
-            return View(contact);
+                _mailService.SendMessage("gilberto@email.com", contactVM.Subject, $"From: {contactVM.Name} - {contactVM.Email} , Message: {contactVM.Message}");
+                ViewBag.UserMessage = "Mail Sent";               
+            }                   
+            return View();
             
         }
 
