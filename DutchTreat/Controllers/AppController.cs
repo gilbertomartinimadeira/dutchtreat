@@ -26,8 +26,16 @@ namespace DutchTreat.Controllers {
 
             if (ModelState.IsValid)
             {
+
+                //Send the email
+
                 return RedirectToAction();
             }
+            else
+            {
+                //Show the errors
+            }
+
             return View(contact);
             
         }
